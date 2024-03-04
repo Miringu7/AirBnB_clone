@@ -1,0 +1,19 @@
+#!/usr/bin/python3
+"""Base Class module"""
+import uuid
+from datetime import datetime
+
+
+class BaseModel:
+    def __init__(self, *args, **kwargs):
+    """Initialization of Base class model"""
+    self.id = str(uuid.uuid4()
+    self.created_at = datetime.now()
+    self.updated_at = daetime.now()
+
+    def __str__(self):
+                  return "[{}], ({}), {}".format(self.__class__.__name__, self.id, self.__dict__)
+
+    def save(self):
+        """Update the 'updated_at' attribute with the current datetime."""
+        self.updated_at = datetime.now()
