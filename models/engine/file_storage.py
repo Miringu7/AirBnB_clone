@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """FileStorage Class module"""
 import json
+import os
 from models.base_model import BaseModel
 
 
@@ -34,11 +35,19 @@ class FileStorage:
     def reload(self):
         """deserializes the JSON file to __objects if file exists."""
         try:
-            with open(self.__file_path) as json_file:
-                loaded_objects = json.load(json_file)
-                for key in loaded_objects.values():
-                    class_name = key["__class__"]
-                    del key["__class__"]
-                    self.new(eval(class_name) (**key))
+            if os.path.getsize(self.__file_path) != 0:
+                with open(self.__file_path) as json_file:
+                    loaded_objects = json.load(json_file)
+                    for key in loaded_objects.values():
+                        class_name = key.pop("__class__", None)
+                        if class_name:
+                            obj = eval(class_name)(**key)
+                            self.new(obj)
+            else:
+                return
         except FileNotFoundError:
-            return
+           print(f"Error: the file '{self.__file_path}' does not exist")
+        except json.JSONDecodeError as e:
+            print(f"Error decoding JSON in '{self.__file_path}': {e}")
+        except Exception as e:
+            print(f"An unexpected error occured: {e}")
