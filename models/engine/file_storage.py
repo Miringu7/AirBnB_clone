@@ -45,9 +45,5 @@ class FileStorage:
                             self.new(obj)
             else:
                 return
-        except FileNotFoundError:
-           print(f"Error: the file '{self.__file_path}' does not exist")
-        except json.JSONDecodeError as e:
-            print(f"Error decoding JSON in '{self.__file_path}': {e}")
         except Exception as e:
             print(f"An unexpected error occured: {e}")
