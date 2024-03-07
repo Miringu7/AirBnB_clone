@@ -4,7 +4,7 @@ from models.base_model import BaseModel
 """imports BaseMOdel module"""
 
 
-class State(BaseModel):
+class Place(BaseModel):
     """ State class
 
     Attributes:
