@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """User Class module"""
 from models.base_model import BaseModel
-"""imports BaseMOdel module"""
 
 
 class User(BaseModel):
