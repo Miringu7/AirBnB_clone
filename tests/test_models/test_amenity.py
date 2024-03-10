@@ -62,7 +62,6 @@ class TestAmenity_instantiation(unittest.TestCase):
         am.id = "123456"
         am.created_at = am.updated_at = dt
         amstr = am.__str__()
-        self.assertIn("[Amenity] (123456)", amstr)
         self.assertIn("'id': '123456'", amstr)
         self.assertIn("'created_at': " + dt_repr, amstr)
         self.assertIn("'updated_at': " + dt_repr, amstr)

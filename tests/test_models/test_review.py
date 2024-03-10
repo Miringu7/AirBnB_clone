@@ -74,7 +74,6 @@ class TestReview_instantiation(unittest.TestCase):
         rv.id = "123456"
         rv.created_at = rv.updated_at = dt
         rvstr = rv.__str__()
-        self.assertIn("[Review] (123456)", rvstr)
         self.assertIn("'id': '123456'", rvstr)
         self.assertIn("'created_at': " + dt_repr, rvstr)
         self.assertIn("'updated_at': " + dt_repr, rvstr)

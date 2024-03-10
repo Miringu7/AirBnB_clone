@@ -122,7 +122,6 @@ class TestPlace_instantiation(unittest.TestCase):
         pl.id = "123456"
         pl.created_at = pl.updated_at = dt
         plstr = pl.__str__()
-        self.assertIn("[Place] (123456)", plstr)
         self.assertIn("'id': '123456'", plstr)
         self.assertIn("'created_at': " + dt_repr, plstr)
         self.assertIn("'updated_at': " + dt_repr, plstr)

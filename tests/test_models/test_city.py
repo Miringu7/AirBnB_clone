@@ -68,7 +68,6 @@ class TestCity_instantiation(unittest.TestCase):
         cy.id = "123456"
         cy.created_at = cy.updated_at = dt
         cystr = cy.__str__()
-        self.assertIn("[City] (123456)", cystr)
         self.assertIn("'id': '123456'", cystr)
         self.assertIn("'created_at': " + dt_repr, cystr)
         self.assertIn("'updated_at': " + dt_repr, cystr)

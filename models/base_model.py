@@ -30,8 +30,8 @@ class BaseModel:
 
     def __str__(self):
         """Returns representation of Base Model"""
-        return "[{}], ({}), {}"
-        .format(self.__class__.__name__, self.id, self.__dict__)
+        return "[{}], ({}), {}".format(
+                self.__class__.__name__, self.id, self.__dict__)
 
     def save(self):
         """Update the 'updated_at' attribute with the current datetime."""

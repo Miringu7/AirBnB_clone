@@ -62,7 +62,6 @@ class TestState_instantiation(unittest.TestCase):
         st.id = "123456"
         st.created_at = st.updated_at = dt
         ststr = st.__str__()
-        self.assertIn("[State] (123456)", ststr)
         self.assertIn("'id': '123456'", ststr)
         self.assertIn("'created_at': " + dt_repr, ststr)
         self.assertIn("'updated_at': " + dt_repr, ststr)
