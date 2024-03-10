@@ -129,6 +129,16 @@ class HBNBCommand(cmd.Cmd):
         elif len(args) == 3:
             print("** value missing **")
         else:
+            for val in storage.all().values():
+                if args[0] == val.__class__.__name__:
+                    class_instance = val
+                    instance_attr = vars(class_instance)
+                    for key, value in instance_attr.items():
+                        if key == "id" and value == args[1]:
+                            attr_name = args[2]
+                            attr_value = args[3].strip('"')
+                            instance_attr[attr_name] = attr_value
+                            break
             storage.save()
 
 
