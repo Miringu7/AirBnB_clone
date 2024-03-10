@@ -87,19 +87,31 @@ class HBNBCommand(cmd.Cmd):
     def do_all(self, arg):
         """Usage: all <class> or <class>.all()
         Display string representations of all instances of a given class.
-        If no class is specified, displays all instantiated objects."""
-        args = arg.split(" ")
-        if arg and args[0] not in HBNBCommand.__classes:
-            print("** class doesn't exist **")
+        If no class is specified, displays all instantiated objects.
+        """
+        args = arg.split()
+
+        if not args:
+            """No argument provided, display all instances"""
+            all_list = [val.__str__() for val in storage.all().values()]
+            print(all_list)
         else:
-            alllist = []
-            for val in storage.all().values():
-                print(val)
-                if len(args) > 0 and args[0] == val.__class__.__name__:
-                    alllist.append(val.__str__())
-                elif not arg:
-                    alllist.append(val.__str__())
-                    print(alllist)
+            """Class specified, check for .all() syntax"""
+            all_list = []
+            class_name = args[0]
+            if arg and args[0] not in HBNBCommand.__classes:
+                print("** class doesn't exist **")
+            elif len(args) == 1:
+                """Display instances of the specified class"""
+                for val in storage.all().values():
+                    if val.__class__.__name__ == class_name:
+                        all_list.append(val.__str__())
+                print(all_list)
+            elif len(args) == 2 and args[1] == ".all()":
+                """Display instances using <class>.all() syntax"""
+                for val in HBNBCommand.__classes[class_name].all():
+                    all_list.append(val.__str__())
+                print(all_list)
 
     def do_count(self, arg):
         """Usage: count <class> or <class>.count()"""
