@@ -22,28 +22,21 @@ class FileStorage:
 
     def new(self, obj):
         """sets in __objects the obj with key <obj class name>.id."""
-        key = "{}.{}".format(obj.__class__.__name__, obj.id)
-        self.__objects[key] = obj
+        self.__objects["{}.{}".format(obj.__class__.__name__, obj.id)] = obj
 
     def save(self):
         """serializes __objects to the JSON file (path: __file_path)."""
-        dictt = self.__objects
-        object_dict = {obj: dictt[obj].to_dict() for obj in dictt.keys()}
-        with open(self.__file_path, 'w') as json_file:
-            json.dump(object_dict, json_file)
+        with open(self.__file_path, mode="w") as f:
+            dictt = {}
+            for x, y in self.__objects.items():
+                dictt[x] = y.to_dict()
+            json.dump(dictt, f)
 
     def reload(self):
         """deserializes the JSON file to __objects if file exists."""
         try:
-            if os.path.getsize(self.__file_path) != 0:
-                with open(self.__file_path) as json_file:
-                    loaded_objects = json.load(json_file)
-                    for key in loaded_objects.values():
-                        class_name = key.pop("__class__", None)
-                        if class_name:
-                            obj = eval(class_name)(**key)
-                            self.new(obj)
-            else:
-                return
-        except Exception as e:
-            print(f"An unexpected error occured: {e}")
+            with open(self.__file_path, encoding="utf-8") as f:
+                for obj in json.load(f).values():
+                    self.new(eval(obj["__class__"])(**obj))
+        except FileNotFoundError:
+            return
