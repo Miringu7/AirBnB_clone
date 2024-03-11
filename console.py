@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 """Defines the HBnB console."""
 import cmd
+import re
+from shlex import split
 from models import storage
 from models.base_model import BaseModel
 from models.user import User
@@ -9,6 +11,24 @@ from models.city import City
 from models.place import Place
 from models.amenity import Amenity
 from models.review import Review
+
+
+def parse(arg):
+    culy_braces = re.search(r"\{(.*?)\}", arg)
+    brakets = re.search(r"\[(.*?)\]", arg)
+    if culy_braces is None:
+        if brakets is None:
+            return [i.strip(",") for i in split(arg)]
+        else:
+            lecer = split(arg[:brackets.span()[0]])
+            retll = [i.strip(",") for i in lecer]
+            retll.append(brakets.group())
+            return retll
+    else:
+        lecer = split(arg[:culy_braces.span()[0]])
+        retll = [i.strip(",") for i in lecer]
+        retll.append(culy_braces.group())
+        return retll
 
 
 class HBNBCommand(cmd.Cmd):
@@ -89,29 +109,20 @@ class HBNBCommand(cmd.Cmd):
         Display string representations of all instances of a given class.
         If no class is specified, displays all instantiated objects.
         """
-        args = arg.split()
-
-        if not args:
-            """No argument provided, display all instances"""
-            all_list = [val.__str__() for val in storage.all().values()]
-            print(all_list)
+        args = parse(arg)
+        if len(args) and args[0] not in HBNBCommand.__classes:
+            print("** class doesn't exist **")
         else:
-            """Class specified, check for .all() syntax"""
-            all_list = []
-            class_name = args[0]
-            if arg and args[0] not in HBNBCommand.__classes:
-                print("** class doesn't exist **")
-            elif len(args) == 1:
-                """Display instances of the specified class"""
-                for val in storage.all().values():
-                    if val.__class__.__name__ == class_name:
-                        all_list.append(val.__str__())
-                print(all_list)
-            elif len(args) == 2 and args[1] == ".all()":
-                """Display instances using <class>.all() syntax"""
-                for val in HBNBCommand.__classes[class_name].all():
-                    all_list.append(val.__str__())
-                print(all_list)
+            alllist = []
+            for val in storage.all().values():
+                print(val)
+                if len(args) > 0 and args[0] == val.__class__.__name__:
+                    alllist.append(val.__str__())
+                    print(alllist)
+                elif not arg:
+                    alllist.append(val.__str__())
+                    print(alllist)
+
 
     def do_count(self, arg):
         """Usage: count <class> or <class>.count()"""
