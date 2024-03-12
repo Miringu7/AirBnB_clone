@@ -98,7 +98,7 @@ class HBNBCommand(cmd.Cmd):
             instance based on the class name and id"""
         classes = storage.all()
         args = arg.split(" ")
-        if len(args) == 0:
+        if not arg:
             print("** class name missing **")
         elif args[0] not in HBNBCommand.__classes:
             print("** class doesn't exist **")
@@ -114,7 +114,7 @@ class HBNBCommand(cmd.Cmd):
         Delete a class instance of a given id."""
         args = arg.split(" ")
         classes = storage.all()
-        if not arg:
+        if not args:
             print("** class name missing **")
         elif args[0] not in HBNBCommand.__classes:
             print("** class doesn't exist **")
