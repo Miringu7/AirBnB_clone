@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """Defines the HBnB console."""
+import difflib
 import cmd
 import re
 from shlex import split
@@ -147,7 +148,10 @@ class HBNBCommand(cmd.Cmd):
         """Usage: count <class> or <class>.count()"""
         count = 0
         for val in storage.all().values():
-            if arg[0] == val.__class__.__name__:
+            argument = "".join(arg.split())
+            val_class = val.__class__.__name__
+
+            if argument == val_class:
                 count += 1
         print(count)
 
