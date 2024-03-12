@@ -50,7 +50,7 @@ class HBNBCommand(cmd.Cmd):
 
     def default(self, arg):
         """Default behavior for cmd module when input is invalid"""
-        argdict = {
+        arg_dict = {
             "all": self.do_all,
             "show": self.do_show,
             "destroy": self.do_destroy,
@@ -59,13 +59,13 @@ class HBNBCommand(cmd.Cmd):
         }
         match = re.search(r"\.", arg)
         if match is not None:
-            argl = [arg[:match.span()[0]], arg[match.span()[1]:]]
-            match = re.search(r"\((.*?)\)", argl[1])
+            arg_list = [arg[:match.span()[0]], arg[match.span()[1]:]]
+            match = re.search(r"\((.*?)\)", arg_list[1])
             if match is not None:
-                command = [argl[1][:match.span()[0]], match.group()[1:-1]]
-                if command[0] in argdict.keys():
-                    call = "{} {}".format(argl[0], command[1])
-                    return argdict[command[0]](call)
+                command = [arg_list[1][:match.span()[0]], match.group()[1:-1]]
+                if command[0] in arg_dict.keys():
+                    call = "{} {}".format(arg_list[0], command[1])
+                    return arg_dict[command[0]](call)
         print("*** Unknown syntax: {}".format(arg))
         return False
 
