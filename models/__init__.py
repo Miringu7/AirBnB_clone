@@ -3,6 +3,7 @@
 from models.engine.file_storage import FileStorage
 """import file_storage.py"""
 
+
 storage = FileStorage()
 """create the variable storage, an instance of FileStorage"""
 storage.reload()
