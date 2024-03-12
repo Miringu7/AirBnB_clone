@@ -14,22 +14,22 @@ from models.amenity import Amenity
 from models.review import Review
 
 
-def parse(arg):
-    culy_braces = re.search(r"\{(.*?)\}", arg)
-    brakets = re.search(r"\[(.*?)\]", arg)
-    if culy_braces is None:
-        if brakets is None:
+def tokenize(arg):
+    braces = re.search(r"\{(.*?)\}", arg)
+    brackets = re.search(r"\[(.*?)\]", arg)
+    if braces is None:
+        if brackets is None:
             return [i.strip(",") for i in split(arg)]
         else:
-            lecer = split(arg[:brackets.span()[0]])
-            retll = [i.strip(",") for i in lecer]
-            retll.append(brakets.group())
-            return retll
+            arg_split = split(arg[:brackets.span()[0]])
+            stripped_arg = [i.strip(",") for i in arg_split]
+            stripped_arg.append(brackets.group())
+            return stripped_arg
     else:
-        lecer = split(arg[:culy_braces.span()[0]])
-        retll = [i.strip(",") for i in lecer]
-        retll.append(culy_braces.group())
-        return retll
+        arg_split = split(arg[:braces.span()[0]])
+        stripped_arg = [i.strip(",") for i in arg_split]
+        stripped_arg.append(braces.group())
+        return stripped_arg
 
 
 class HBNBCommand(cmd.Cmd):
@@ -39,7 +39,7 @@ class HBNBCommand(cmd.Cmd):
     """
 
     prompt = "(hbnb) "
-    __classes = {
+    new_classes = {
         "BaseModel",
         "User",
         "State",
@@ -50,8 +50,8 @@ class HBNBCommand(cmd.Cmd):
     }
 
     def default(self, arg):
-        """Default behavior for cmd module when input is invalid"""
-        arg_dict = {
+        """Default behavior for cmdwhen input is invalid"""
+        arg_dicts = {
             "all": self.do_all,
             "show": self.do_show,
             "destroy": self.do_destroy,
@@ -64,13 +64,13 @@ class HBNBCommand(cmd.Cmd):
             match = re.search(r"\((.*?)\)", arg_list[1])
             if match is not None:
                 command = [arg_list[1][:match.span()[0]], match.group()[1:-1]]
-                if command[0] in arg_dict.keys():
+                if command[0] in arg_dicts.keys():
                     call = "{} {}".format(arg_list[0], command[1])
-                    chars_to_remove = '":{}'
-                    clean_call = ''.join(
-                            char for char in call if char not in chars_to_remove)
+                    chars_remove = '":{}'
+                    new_call = ''.join(
+                            char for char in call if char not in chars_remove)
                     """clean_call = call.replace('"', '').replace("'", '')"""
-                    return arg_dict[command[0]](clean_call)
+                    return arg_dicts[command[0]](new_call)
         print("*** Unknown syntax: {}".format(arg))
         return False
 
@@ -91,7 +91,7 @@ class HBNBCommand(cmd.Cmd):
         """Create a new instance of BaseModel, save it, and print its id."""
         if not arg:
             print("** class name missing **")
-        elif arg not in HBNBCommand.__classes:
+        elif arg not in HBNBCommand.new_classes:
             print("** class doesn't exist **")
         else:
             print(eval(arg)().id)
@@ -104,7 +104,7 @@ class HBNBCommand(cmd.Cmd):
         args = arg.split(" ")
         if not arg:
             print("** class name missing **")
-        elif args[0] not in HBNBCommand.__classes:
+        elif args[0] not in HBNBCommand.new_classes:
             print("** class doesn't exist **")
         elif len(args) == 1:
             print("** instance id missing **")
@@ -120,7 +120,7 @@ class HBNBCommand(cmd.Cmd):
         classes = storage.all()
         if not args:
             print("** class name missing **")
-        elif args[0] not in HBNBCommand.__classes:
+        elif args[0] not in HBNBCommand.new_classes:
             print("** class doesn't exist **")
         elif len(args) == 1:
             print("** instance id missing **")
@@ -135,8 +135,8 @@ class HBNBCommand(cmd.Cmd):
         Display string representations of all instances of a given class.
         If no class is specified, displays all instantiated objects.
         """
-        args = parse(arg)
-        if len(args) and args[0] not in HBNBCommand.__classes:
+        args = tokenize(arg)
+        if len(args) and args[0] not in HBNBCommand.new_classes:
             print("** class doesn't exist **")
         else:
             alllist = []
@@ -146,7 +146,6 @@ class HBNBCommand(cmd.Cmd):
                 elif not arg:
                     alllist.append(val.__str__())
             print(alllist)
-
 
     def do_count(self, arg):
         """Usage: count <class> or <class>.count()"""
@@ -163,12 +162,12 @@ class HBNBCommand(cmd.Cmd):
         """Usage: update <class name> <id> <attribute name>
         '<attribute value>'
         """
-        args = parse(arg)
+        args = tokenize(arg)
         """print("args: '{}'\n".format(args))"""
         classes = storage.all()
         if not arg:
             print("** class name missing **")
-        elif args[0] not in HBNBCommand.__classes:
+        elif args[0] not in HBNBCommand.new_classes:
             print("** class doesn't exist **")
         elif len(args) == 1:
             print("** instance id missing **")
