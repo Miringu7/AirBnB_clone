@@ -66,7 +66,11 @@ class HBNBCommand(cmd.Cmd):
                 command = [arg_list[1][:match.span()[0]], match.group()[1:-1]]
                 if command[0] in arg_dict.keys():
                     call = "{} {}".format(arg_list[0], command[1])
-                    return arg_dict[command[0]](call)
+                    chars_to_remove = '":{}'
+                    clean_call = ''.join(
+                            char for char in call if char not in chars_to_remove)
+                    """clean_call = call.replace('"', '').replace("'", '')"""
+                    return arg_dict[command[0]](clean_call)
         print("*** Unknown syntax: {}".format(arg))
         return False
 
@@ -96,6 +100,7 @@ class HBNBCommand(cmd.Cmd):
     def do_show(self, arg):
         """Prints the string representation of an
             instance based on the class name and id"""
+        print("arg: '{}'".format(arg))
         classes = storage.all()
         args = arg.split(" ")
         if not arg:
@@ -159,7 +164,9 @@ class HBNBCommand(cmd.Cmd):
         """Usage: update <class name> <id> <attribute name>
         '<attribute value>'
         """
-        args = arg.split(" ")
+        print("arg: '{}'".format(arg))
+        args = parse(arg)
+        print("args: '{}'".format(args))
         classes = storage.all()
         if not arg:
             print("** class name missing **")
