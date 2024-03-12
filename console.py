@@ -164,6 +164,7 @@ class HBNBCommand(cmd.Cmd):
         '<attribute value>'
         """
         args = parse(arg)
+        """print("args: '{}'\n".format(args))"""
         classes = storage.all()
         if not arg:
             print("** class name missing **")
@@ -177,6 +178,8 @@ class HBNBCommand(cmd.Cmd):
             print("** attribute name missing **")
         elif len(args) == 3:
             print("** value missing **")
+        elif len(args) == 5:
+            print("** value missing **")
         else:
             for val in storage.all().values():
                 if args[0] == val.__class__.__name__:
@@ -187,6 +190,10 @@ class HBNBCommand(cmd.Cmd):
                             attr_name = args[2]
                             attr_value = args[3].strip('"')
                             instance_attr[attr_name] = attr_value
+                            if len(args) == 6:
+                                attr_name = args[4]
+                                attr_value = args[5]
+                                instance_attr[attr_name] = attr_value
                             break
             storage.save()
 
