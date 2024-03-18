@@ -9,7 +9,7 @@ class BaseModel:
     """defines all common attributes/methods for other classes:"""
     def __init__(self, *args, **kwargs):
         """Initialization of Base class model
-        
+
         Arguments:
             args: strings
             kwargs: key value pair
